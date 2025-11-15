@@ -4,30 +4,22 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Sets up an array of transactions that initialize as empty
+  const [transactions, setTransactions] = useState([])
+  const [balance, setBalance] = useState(2000);
 
   return (
+    // Lines 14-16: Setting background color to orange and title color to pink
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='min-h-screen bg-orange-400 p-8'>
+        <h1 className= "text-pink-500 text-4xl font-bold">Budget Buddy</h1>
+        <p className= " text-black text-xl">Balance: ${balance}</p>
+
+      <div className="mt-4">
+        <p className= " text-black text-xl">Transactions: {transactions.length}</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    </div>
+      
     </>
   )
 }
