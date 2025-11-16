@@ -43,6 +43,10 @@ function App() {
     // Lines 73-85 create the dropdown select for the transaction category
     // Lines 86-96 create the input field for the transaction date
     // Lines 97-104 create the submit button to add the transaction
+
+    // Lines 110-112 create the title for the transaction history section
+    // Lines 113-121 display a message if there are no transactions
+    // Lines 122-134 map over the transactions array and display each transaction's details in a styled div
     <>
       <div className='min-h-screen bg-orange-400 p-8'>
         <h1 className= "text-pink-500 text-4xl font-bold">Budget Buddy</h1>
@@ -54,7 +58,7 @@ function App() {
 
       {/* Transaction Input Form: <form> automatically creates a form for the user to type the transaction data pieces */}
 
-      <form onSubmit={handleAddTransaction} className='bg-white p-6 rounded-lg mt-8 max-w-md'>
+      <form onSubmit={handleAddTransaction} className='w-full max-w-md mx-auto bg-white p-6 rounded-lg mt-8'>
         <h2 className='text-2xl font-bold mb-4 text-black'>Add Transaction</h2>
         <div className='mb-4'>
           <label className='block text-black mb-2'>From: </label>
@@ -106,8 +110,28 @@ function App() {
           Add Transaction
         </button>
       </form>
+
+      {/* Transaction List Section */}
+
+      <div className='mt-8 max-w-md mx-auto'>
+        <h2 className='text-2xl font-bold mb-4 text-black'>Transaction History</h2>
+        {transactions.length === 0 ? (
+          <p className='text-black'>No transactions yet. Fill out the transaction form to add one!</p>
+        ) : (
+          <div className='space-y-2'>
+            {transactions.map((transaction) => (
+              <div key={transaction.id} className='p-4 border border-gray-300 rounded bg-white'>
+                <p className='text-black font-bold'>{transaction.name}</p>
+                <p className='text-black'>Amount: ${transaction.amount.toFixed(2)}</p>
+                <p className='text-black'>Category: {transaction.category}</p>
+                <p className='text-black'>Date: {transaction.date}</p>
+              </div>
+            ))}
+          </div>
+        )}  
+
     </div>
-      
+  </div>
     </>
   )
 }
