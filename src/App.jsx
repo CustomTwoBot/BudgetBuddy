@@ -1,12 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  // Sets up an array of transactions that initialize as empty
-  const [transactions, setTransactions] = useState([]);
-  const [balance, setBalance] = useState(2000);
+  // Gets the saved transactions from local storage or initializes it to an empty array if not found (Phase 4)
+  const [transactions, setTransactions] = useState(() => {
+    const savedTransactions = localStorage.getItem('transactions');
+    if (savedTransactions) {
+      return JSON.parse(savedTransactions);
+    }
+    return [];
+  });
+  // Gets the saved balance from local storage or initializes it to 2000 if not found (Phase 4)
+  const [balance, setBalance] = useState(() => {
+    const savedBalance = localStorage.getItem('balance');
+    if (savedBalance) {
+      return JSON.parse(savedBalance);
+    }
+    return 2000; // Default balance
+  });
 
   // State variables for transaction inputs
   const [name, setName] = useState('');
@@ -14,6 +27,15 @@ function App() {
   const [category, setCategory] = useState('Other');
   const [date, setDate] = useState('');
 
+  // Saves transactions to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+  }, [transactions]);
+
+  // Saves balance to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('balance', JSON.stringify(balance));
+  }, [balance]);
   // Handles adding a new transaction
   const handleAddTransaction = (e) => {
     e.preventDefault(); // Prevents the default form submission behavior (refreshing the page after every entry)
@@ -35,8 +57,10 @@ function App() {
   }
     
   return (
+    // Phase 2
     // Lines 38-44 create the header section of the app, displaying the app name, current balance, and number of transactions.
 
+    // Phase 3
     // Lines 49-50 create the title of the form and the form structure itself in our website
     // Lines 51-61 create the input field for the transaction name
     // Lines 62-72 create the input field for the transaction amount
@@ -44,6 +68,7 @@ function App() {
     // Lines 86-96 create the input field for the transaction date
     // Lines 97-104 create the submit button to add the transaction
 
+    // Phase 4
     // Lines 110-112 create the title for the transaction history section
     // Lines 113-121 display a message if there are no transactions
     // Lines 122-134 map over the transactions array and display each transaction's details in a styled div
