@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
+// Chart imports for chart functionality
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+// Colors for the pie chart segments
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 function App() {
   // Gets the saved transactions from local storage or initializes it to an empty array if not found (Phase 4)
@@ -55,7 +60,26 @@ function App() {
     setCategory('Other')
     setDate('')
   }
-    
+  // Calculates total amount spent per category for the pie chart
+  const categoryCount = () => {
+    // Create an object to hold category totals
+    const categoryTotals = {};
+    // For each transaction, add its amount to the corresponding category total if it matches the category we are searching for
+    transactions.forEach(transaction => {
+      if (categoryTotals[transaction.category]) {
+        categoryTotals[transaction.category] += transaction.amount;
+      } else {
+        categoryTotals[transaction.category] = transaction.amount;
+      }
+    });
+
+    // Convert the category totals object into an array suitable for the pie chart
+    return Object.entries(categoryTotals).map(([category, total]) => ({
+      name: category,
+      value: total
+    })
+    )
+  }  
   return (
     // Phase 2
     // Lines 38-44 create the header section of the app, displaying the app name, current balance, and number of transactions.
@@ -72,8 +96,11 @@ function App() {
     // Lines 110-112 create the title for the transaction history section
     // Lines 113-121 display a message if there are no transactions
     // Lines 122-134 map over the transactions array and display each transaction's details in a styled div
+
+    // Phase 6
+    // Lines 163-189 creates the pie chart section that visualizes spending by category using the Recharts library
     <>
-      <div className='min-h-screen bg-orange-400 p-8'>
+      <div className='min-h-screen bg-gray-500 p-8'>
         <h1 className= "text-pink-500 text-4xl font-bold">Budget Buddy</h1>
         <p className= " text-black text-xl">Balance: ${balance}</p>
 
@@ -135,6 +162,34 @@ function App() {
           Add Transaction
         </button>
       </form>
+
+      {/* Total Spending Pie Chart Section */}
+
+      {transactions.length > 0 && ( 
+        <div className='mt-8 max-w-md mx-auto'>
+          <h2 className='text-2xl font-bold mb-4 text-black'>Spending by Category</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={categoryCount()}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                fill="#8884d8"
+                label
+              >
+                {categoryCount().map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       {/* Transaction List Section */}
 
