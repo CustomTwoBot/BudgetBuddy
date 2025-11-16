@@ -109,6 +109,7 @@ function App() {
       }
     }
   }
+  // Clears all transactions and resets balance (Phase 8)
   const clearTransactions = () => {
     setTransactions([]);
     setBalance(2000); // Reset balance to default
@@ -118,24 +119,6 @@ function App() {
     localStorage.setItem('balance', JSON.stringify(2000));
   }
   return (
-    // Phase 2
-    // Lines 38-44 create the header section of the app, displaying the app name, current balance, and number of transactions.
-
-    // Phase 3
-    // Lines 49-50 create the title of the form and the form structure itself in our website
-    // Lines 51-61 create the input field for the transaction name
-    // Lines 62-72 create the input field for the transaction amount
-    // Lines 73-85 create the dropdown select for the transaction category
-    // Lines 86-96 create the input field for the transaction date
-    // Lines 97-104 create the submit button to add the transaction
-
-    // Phase 4
-    // Lines 110-112 create the title for the transaction history section
-    // Lines 113-121 display a message if there are no transactions
-    // Lines 122-134 map over the transactions array and display each transaction's details in a styled div
-
-    // Phase 6
-    // Lines 163-189 creates the pie chart section that visualizes spending by category using the Recharts library
     <>
       <div className='min-h-screen bg-gray-500 p-8'>
         <h1 className= "text-pink-500 text-4xl font-bold">Budget Buddy</h1>

@@ -1,0 +1,28 @@
+// Phase 2
+    // Lines 122-129 create the header section of the app, displaying the app name, current balance, and number of transactions.
+
+// Phase 3
+    // Lines 139-140 create the title of the form and the form structure itself in our website
+    // Lines 141-150 create the input field for the transaction name
+    // Lines 151-160 create the input field for the transaction amount
+    // Lines 161-173 create the dropdown select for the transaction category
+    // Lines 174-183 create the input field for the transaction date
+    // Lines 184-190 create the submit button to add the transaction
+
+    // Phase 4
+    // Lines 264-266 create the title for the transaction history section
+    // Lines 267-275 display a message if there are no transactions
+    // Lines 276-288 map over the transactions array and display each transaction's details in a styled div
+    
+
+    // Phase 6
+    // Lines 192-218 creates the pie chart section that visualizes spending by category using the Recharts library
+
+    // Phase 7
+    // Lines 222-225 create the title and structure for the affordability calculator section
+    // Lines 226-234 create the input field for the planned purchase amount
+    // Lines 235-243 create the input field for the days remaining in the month
+    // Lines 244-261 display the affordability results based on user input
+
+    // Phase 8
+    // Lines 160-165 create the "Clear All Transactions" button that resets the transaction list and balance
