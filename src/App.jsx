@@ -32,6 +32,11 @@ function App() {
   const [category, setCategory] = useState('Other');
   const [date, setDate] = useState('');
 
+  // State variable for affordability calculator
+  const [budgetAmount, setBudgetAmount] = useState('');
+  const [daysInMonth, setDaysInMonth] = useState(30);
+
+
   // Saves transactions to local storage whenever they change
   useEffect(() => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
@@ -79,7 +84,39 @@ function App() {
       value: total
     })
     )
-  }  
+  }
+  const affordabilityCalculator = () => {
+    if (!budgetAmount || daysInMonth <= 0 || daysInMonth > 31) {
+      return null;
+    }
+    else {
+      // Calculate total spent from transactions
+      const totalSpent = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+      // Calculate remaining budget after planned purchase
+      const remainingBudget = balance - totalSpent;
+      // Calculate budget after purchase
+      const afterPurchaseBudget = remainingBudget - parseFloat(budgetAmount);
+      // Calculate daily budget
+      const dailyBudget = afterPurchaseBudget / daysInMonth;
+
+      // Return the calculated values and if the user can afford the purchase
+      return {
+        canAfford: afterPurchaseBudget >= 0,
+        remainingBudget: remainingBudget.toFixed(2),
+        afterPurchaseBudget: afterPurchaseBudget.toFixed(2),
+        dailyBudget: dailyBudget.toFixed(2)
+        
+      }
+    }
+  }
+  const clearTransactions = () => {
+    setTransactions([]);
+    setBalance(2000); // Reset balance to default
+
+    // Also clear from local storage
+    localStorage.setItem('transactions', JSON.stringify([]));
+    localStorage.setItem('balance', JSON.stringify(2000));
+  }
   return (
     // Phase 2
     // Lines 38-44 create the header section of the app, displaying the app name, current balance, and number of transactions.
@@ -107,6 +144,12 @@ function App() {
       <div className="mt-4">
         <p className= " text-black text-xl">Transactions: {transactions.length}</p>
       </div>
+      <button
+        onClick={clearTransactions}
+        className='mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600'
+      >
+        Clear All Transactions
+      </button>
 
       {/* Transaction Input Form: <form> automatically creates a form for the user to type the transaction data pieces */}
 
@@ -191,6 +234,47 @@ function App() {
         </div>
       )}
 
+      {/* Affordability Calculator Section */}
+      
+      <div className='mt-8 max-w-md mx-auto bg-white p-6 rounded-lg'>
+        <h2 className='text-2xl font-bold mb-4 text-black'>Affordability Calculator</h2>
+        <div className='mb-4'>
+          <label className='block text-black mb-2'>Planned Purchase Amount: </label>
+          <input
+            type="number"
+            value={budgetAmount}
+            onChange={(e) => setBudgetAmount(e.target.value)}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
+        </div>
+        <div className='mb-4'>
+          <label className='block text-black mb-2'>Days Remaining in Month: </label>
+          <input
+            type="number"
+            value={daysInMonth}
+            onChange={(e) => setDaysInMonth(e.target.value)}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
+        </div>
+        {affordabilityCalculator() && (
+          <div className='mt-4 text-black'>
+            {affordabilityCalculator().canAfford ? (
+              <div>
+                <p>Yes, You can afford this purchase!</p>
+                <p>Remaining Budget Before Purchase: ${affordabilityCalculator().remainingBudget}</p>
+                <p>Budget After Purchase: ${affordabilityCalculator().afterPurchaseBudget}</p>
+                <p>Daily Budget After Purchase: ${affordabilityCalculator().dailyBudget}</p>
+              </div>
+            ) : (
+              <div>
+                <p>No, You cannot afford this purchase.</p>
+                <p>This purchase would send you <span className="font-bold text-red-600">${Math.abs(calculateAffordability()?.remaining).toFixed(2)}</span> over budget!</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      
       {/* Transaction List Section */}
 
       <div className='mt-8 max-w-md mx-auto'>
