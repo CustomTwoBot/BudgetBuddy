@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Card from './Card.jsx';
 
 // Colors for the pie chart segments
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -120,167 +121,205 @@ function App() {
   }
   return (
     <>
-      <div className='min-h-screen bg-gray-500 p-8'>
-        <h1 className= "text-pink-500 text-4xl font-bold">Budget Buddy</h1>
-        <p className= " text-black text-xl">Balance: ${balance}</p>
-
-      <div className="mt-4">
-        <p className= " text-black text-xl">Transactions: {transactions.length}</p>
-      </div>
-      <button
-        onClick={clearTransactions}
-        className='mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600'
-      >
-        Clear All Transactions
-      </button>
-
-      {/* Transaction Input Form: <form> automatically creates a form for the user to type the transaction data pieces */}
-
-      <form onSubmit={handleAddTransaction} className='w-full max-w-md mx-auto bg-white p-6 rounded-lg mt-8'>
-        <h2 className='text-2xl font-bold mb-4 text-black'>Add Transaction</h2>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>From: </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-            required
-          />
-        </div>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>Amount: </label>
-          <input
-            type = "number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-            required
-          />
-        </div>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>Category: </label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-          >
-            <option value="Food/Drink">Food/Drink</option>
-            <option value="Transport">Transport</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value= "Other">Other</option>
-          </select>
-        </div>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>Date: </label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-            required
-          />
-        </div>
+    <div className="min-h-screen bg-bg-DEFAULT p-8">
+      {/* Header */}
+      <Card title="Budget Buddy" className="lg:col-span-1">
+        <header className="max-w-7xl mx-auto mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-accent-500">Budget Buddy</h1>
+            <p className="text-sm text-gray-300 mt-2">Balance: ${balance.toFixed(2)}</p>
+            <p className="text-sm text-gray-400 mt-1">Transactions: {transactions.length}</p>
+          </div>
         <button
-          type="submit"
-          className='... bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600'
+          onClick={clearTransactions}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+          type="button"
         >
-          Add Transaction
+          Reset Data
         </button>
-      </form>
+      </header>
+    </Card>
 
-      {/* Total Spending Pie Chart Section */}
+      {/* Main grid */}
+      <main className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Add Transaction Card */}
+        <Card title="Add Transaction" className="lg:col-span-1">
+          <form onSubmit={handleAddTransaction} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium mb-1">
+                From:
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                placeholder="Enter name"
+                required
+              />
+            </div>
 
-      {transactions.length > 0 && ( 
-        <div className='mt-8 max-w-md mx-auto'>
-          <h2 className='text-2xl font-bold mb-4 text-black'>Spending by Category</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={categoryCount()}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
+            <div>
+              <label htmlFor="amount" className="block text-sm font-medium mb-1">
+                Amount:
+              </label>
+              <input
+                id="amount"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                placeholder="0.00"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium mb-1">
+                Category:
+              </label>
+              <select
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
               >
-                {categoryCount().map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+                <option value="Food/Drink">Food/Drink</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
 
-      {/* Affordability Calculator Section */}
-      
-      <div className='mt-8 max-w-md mx-auto bg-white p-6 rounded-lg'>
-        <h2 className='text-2xl font-bold mb-4 text-black'>Affordability Calculator</h2>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>Planned Purchase Amount: </label>
-          <input
-            type="number"
-            value={budgetAmount}
-            onChange={(e) => setBudgetAmount(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-          />
-        </div>
-        <div className='mb-4'>
-          <label className='block text-black mb-2'>Days Remaining in Month: </label>
-          <input
-            type="number"
-            value={daysInMonth}
-            onChange={(e) => setDaysInMonth(e.target.value)}
-            className='w-full p-2 border border-gray-300 rounded'
-          />
-        </div>
-        {affordabilityCalculator() && (
-          <div className='mt-4 text-black'>
-            {affordabilityCalculator().canAfford ? (
-              <div>
-                <p>Yes, You can afford this purchase!</p>
-                <p>Remaining Budget Before Purchase: ${affordabilityCalculator().remainingBudget}</p>
-                <p>Budget After Purchase: ${affordabilityCalculator().afterPurchaseBudget}</p>
-                <p>Daily Budget After Purchase: ${affordabilityCalculator().dailyBudget}</p>
-              </div>
-            ) : (
-              <div>
-                <p>No, You cannot afford this purchase.</p>
-                <p>This purchase would send you <span className="font-bold text-red-600">${Math.abs(calculateAffordability()?.remaining).toFixed(2)}</span> over budget!</p>
+            <div>
+              <label htmlFor="date" className="block text-sm font-medium mb-1">
+                Date:
+              </label>
+              <input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-accent-500 hover:bg-accent-400 text-black font-semibold px-4 py-2 rounded-lg transition"
+            >
+              Add Transaction
+            </button>
+          </form>
+        </Card>
+
+        {/* Pie Chart Card */}
+        {transactions.length > 0 && (
+          <Card title="Spending by Category" className="lg:col-span-2">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={categoryCount()}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                >
+                  {categoryCount().map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
+        )}
+
+        {/* Affordability Calculator Card */}
+        <Card title="Affordability Calculator" className="md:col-span-2 lg:col-span-1">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="budgetAmount" className="block text-sm font-medium mb-1">
+                Planned Purchase:
+              </label>
+              <input
+                id="budgetAmount"
+                type="number"
+                value={budgetAmount}
+                onChange={(e) => setBudgetAmount(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="daysInMonth" className="block text-sm font-medium mb-1">
+                Days Remaining:
+              </label>
+              <input
+                id="daysInMonth"
+                type="number"
+                value={daysInMonth}
+                onChange={(e) => setDaysInMonth(e.target.value)}
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
+              />
+            </div>
+
+            {affordabilityCalculator() && (
+              <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm space-y-2">
+                {affordabilityCalculator().canAfford ? (
+                  <>
+                    <p className="text-accent-300 font-semibold">✓ You can afford this!</p>
+                    <p>Before: ${affordabilityCalculator().remainingBudget}</p>
+                    <p>After: ${affordabilityCalculator().afterPurchaseBudget}</p>
+                    <p className="text-accent-300">Daily budget: ${affordabilityCalculator().dailyBudget}</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-red-400 font-semibold">✗ Cannot afford this.</p>
+                    <p>Over budget by: ${Math.abs(affordabilityCalculator().afterPurchaseBudget).toFixed(2)}</p>
+                  </>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
-      
-      {/* Transaction List Section */}
+        </Card>
 
-      <div className='mt-8 max-w-md mx-auto'>
-        <h2 className='text-2xl font-bold mb-4 text-black'>Transaction History</h2>
-        {transactions.length === 0 ? (
-          <p className='text-black'>No transactions yet. Fill out the transaction form to add one!</p>
-        ) : (
-          <div className='space-y-2'>
-            {transactions.map((transaction) => (
-              <div key={transaction.id} className='p-4 border border-gray-300 rounded bg-white'>
-                <p className='text-black font-bold'>{transaction.name}</p>
-                <p className='text-black'>Amount: ${transaction.amount.toFixed(2)}</p>
-                <p className='text-black'>Category: {transaction.category}</p>
-                <p className='text-black'>Date: {transaction.date}</p>
-              </div>
-            ))}
-          </div>
-        )}  
-
+        {/* Transaction History Card */}
+        <Card title="Transaction History" className="lg:col-span-3">
+          {transactions.length === 0 ? (
+            <p className="text-gray-400">No transactions yet. Add one to get started!</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {transactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                >
+                  <p className="font-semibold text-accent-300">{transaction.name}</p>
+                  <p className="text-sm text-gray-300 mt-1">
+                    Amount: ${transaction.amount.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-gray-400">Category: {transaction.category}</p>
+                  <p className="text-sm text-gray-400">Date: {transaction.date}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </main>
     </div>
-  </div>
-    </>
+  </>
+
   )
 }
-
 export default App
