@@ -121,24 +121,24 @@ function App() {
   }
   return (
     <>
-    <div className="min-h-screen bg-bg-DEFAULT p-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-900/80 via-bg to-bg/80 p-8">
       {/* Header */}
-      <Card title="Budget Buddy" className="lg:col-span-1">
-        <header className="max-w-7xl mx-auto mb-8 flex items-start justify-between gap-4">
+      <header className="max-w-7xl mx-auto mb-6 bg-gradient-to-br from-brand-900/80 via-bg to-bg/80 rounded-2xl p-6 shadow-xl backdrop-blur-sm border border-white/5">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold text-accent-500">Budget Buddy</h1>
             <p className="text-sm text-gray-300 mt-2">Balance: ${balance.toFixed(2)}</p>
             <p className="text-sm text-gray-400 mt-1">Transactions: {transactions.length}</p>
           </div>
-        <button
-          onClick={clearTransactions}
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
-          type="button"
-        >
-          Reset Data
-        </button>
+          <button
+            onClick={clearTransactions}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+            type="button"
+          >
+            Reset Data
+          </button>
+        </div>
       </header>
-    </Card>
 
       {/* Main grid */}
       <main className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -183,7 +183,7 @@ function App() {
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
+                className="w-full p-2 border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-accent-500 [&>option]:bg-gray-900 [&>option]:text-white"
               >
                 <option value="Food/Drink">Food/Drink</option>
                 <option value="Transport">Transport</option>
